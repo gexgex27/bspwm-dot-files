@@ -9,7 +9,11 @@ DIR="$HOME/.config/kitty"
 
 CONFIG="$DIR/kitty.conf"
 
-kitty --class 'Music,Music' --config "$CONFIG" \
-		  -o window.dimensions.columns=109 window.dimensions.lines=22 \
-		  -e ~/.config/ncmpcpp/scripts/ncmpcpp-art
+# kitty --class 'Music,Music' --config "$CONFIG" \
+# 		  -o window.dimensions.columns=109 window.dimensions.lines=22 \
+# 		  -e ~/.config/ncmpcpp/scripts/ncmpcpp-art
 
+kitty --class 'Music,Music' --config "$CONFIG" \
+      -o initial_window_width=109 -o initial_window_height=22 \
+      nvim
+      # ~/.config/ncmpcpp/scripts/ncmpcpp-art
