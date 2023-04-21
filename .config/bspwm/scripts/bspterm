@@ -13,7 +13,7 @@ if [ "$1" == "--float" ]; then
 elif [ "$1" == "--full" ]; then
 	kitty --class 'Fullscreen,Fullscreen' --config "$CONFIG" \
         --start-as=fullscreen \
-        -o window_padding_width=30 \
+        -o window_padding_width=30
 else
 	kitty --config "$CONFIG"
 fi
