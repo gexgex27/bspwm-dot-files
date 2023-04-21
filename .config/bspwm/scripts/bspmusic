@@ -11,5 +11,4 @@ CONFIG="$DIR/kitty.conf"
 
 kitty --class 'Music,Music' --config "$CONFIG" \
       -o initial_window_width=109 -o initial_window_height=22 \
-      nvim
-      # ~/.config/ncmpcpp/scripts/ncmpcpp-art
+      ~/.config/ncmpcpp/scripts/ncmpcpp-art
