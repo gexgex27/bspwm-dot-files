@@ -4,12 +4,12 @@
 ##
 ## Run ncmpcpp with alternate config
 
-# bspwm directory
-DIR="$HOME/.config/alacritty"
+# kitty directory
+DIR="$HOME/.config/kitty"
 
-CONFIG="$DIR/alacritty.yml"
+CONFIG="$DIR/kitty.conf"
 
-alacritty --class 'Music,Music' --config-file "$CONFIG" \
+kitty --class 'Music,Music' --config "$CONFIG" \
 		  -o window.dimensions.columns=109 window.dimensions.lines=22 \
 		  -e ~/.config/ncmpcpp/scripts/ncmpcpp-art
 
