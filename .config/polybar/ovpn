@@ -1,0 +1,77 @@
+#!/bin/bash
+
+VPN_NAME="PQ"
+
+VPN_CONNECT="nmcli connection up pq"
+VPN_DISCONNECT="nmcli connection down pq"
+
+VPN_GET_STATUS="nmcli connection show --active"
+VPN_STATUS="$($VPN_GET_STATUS | grep pq | awk '{print $1}')"
+
+ICON_CONNECTED=""
+ICON_DISCONNECTED=""
+COLOR_CONNECTED="#A3BE8C"
+COLOR_DISCONNECTED="#BF616A"
+COLOR_BACKGROUND="#e7e8eb"
+
+vpn_toggle_connection() {
+if [ -n "$VPN_STATUS" ];
+then
+        $VPN_DISCONNECT
+else
+        $VPN_CONNECT
+fi
+}
+
+ip_address_lookup() {
+	ip_address=$(curl --silent https://icanhazip.com/)
+	echo "$ip_address"
+}
+
+vpn_report() {
+if [ -n "$VPN_STATUS" ]; then
+		if [ "$@" ]; then
+			if [ "$1" == "pq" ]; then
+				report="PQ"
+				echo "%{B$COLOR_BACKGROUND}%{F$COLOR_CONNECTED}$ICON_CONNECTED%{B- F-}"
+
+			elif [ "$1" == "geoip" ] && hash geoiplookup 2>/dev/null; then
+				ip_address=$(ip_address_lookup)
+				country=$(geoiplookup "$ip_address" | head -n1 | cut -c24-25)
+				city=$(geoiplookup "$ip_address" | cut -d',' -f5 | sed -n '2{p;q}' | sed 's/^ //')
+				report="$city $country"
+
+			elif [ "$1" == "ip" ]; then
+				report=$(ip_address_lookup)
+			fi
+		else
+			echo "You need to provide a status method."
+		fi
+elif [ -z "$VPN_STATUS" ]; then
+	echo "%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F-}"
+else
+	echo "%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F-}"
+fi
+}
+
+ip_address_to_clipboard() {
+# finds your IP and copies to clipboard
+	ip_address_lookup | xclip -selection clipboard
+}
+
+case "$1" in
+	toggle|--toggle-connection) vpn_toggle_connection ;;
+	ip-clip|--ip-address) ip_address_to_clipboard ;;
+	status) vpn_report "$2" ;;
+	help|*) cat <<- EOF
+		  Usage: vpn_module <option>
+		  options:
+		    toggle           toggles VPN connection
+		    ip-clip          copies ip address to clipboard
+		    status <method>  reports back with VPN status and location
+		    methods:
+		       pq            uses PQ status to print location
+		       geoip         uses the geoip package to print location
+		       ip            prints ip address
+	EOF
+esac
