@@ -2,9 +2,9 @@
 
 ### Directories ###
 ncmpcpp_directory 	= ~/.config/ncmpcpp
-lyrics_directory  	= ~/.local/share/ncmpcpp/lyrics
+lyrics_directory  	= ~/.config/ncmpcpp/lyrics
 mpd_music_dir     	= ~/Music
-mpd_host 		  	= "127.0.0.1"
+mpd_host 		  	= "localhost"
 mpd_port 		  	= "6600"
 mpd_crossfade_time 	= "2"
 
@@ -50,10 +50,10 @@ alternative_ui_separator_color 		  = "blue"
 alternative_header_first_line_format  = $b$5$/b  $b$8{%t}|{%f}$/b $/b 
 alternative_header_second_line_format = {$b{$2  %a$9}{ - $7  %b$9}{ ($2%y$9)}}|{%D}
 
-### Song list ###
-song_status_format		 = "$7%t"
-song_list_format 		 = "  $4%t$9 $7$R%a$9 $2%l$9  "
-song_library_format 	 = {{%a - %t} (%b)}|{%f}
+### Song list ### -- need rework
+song_status_format		   = "$7%t"
+song_list_format 		     = "  $4%t$9 $7$R%a$9 $2%l$9  "
+song_library_format 	   = {{%a - %t} (%b)}|{%f}
 song_columns_list_format = "(35)[blue]{t} (30)[green]{a} (6)[cyan]{lr}"
 
 ### Colors ###
@@ -69,7 +69,7 @@ selected_item_prefix = "* "
 color1 = "white"
 color2 = "red"
 
-### Layout ###
+## Layout ###
 startup_screen = visualizer
 startup_slave_screen = playlist  
 startup_slave_screen_focus = yes

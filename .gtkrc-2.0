@@ -3,7 +3,7 @@
 
 include "/home/explo/.gtkrc-2.0.mine"
 gtk-theme-name="Arc-Lighter"
-gtk-icon-theme-name="Papirus-Light"
+gtk-icon-theme-name="Arc"
 gtk-font-name="Roboto 9"
 gtk-cursor-theme-name="Vanilla-DMZ"
 gtk-cursor-theme-size=0
@@ -15,5 +15,5 @@ gtk-enable-event-sounds=1
 gtk-enable-input-feedback-sounds=1
 gtk-xft-antialias=1
 gtk-xft-hinting=1
-gtk-xft-hintstyle="hintmedium"
+gtk-xft-hintstyle="hintslight"
 gtk-xft-rgba="rgb"

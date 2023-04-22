@@ -4,6 +4,7 @@
 !/.fonts
 !/.config
 /.config/*
+!/.config/alacritty
 !/.config/bspwm
 !/.config/sxhkd
 !/.config/kitty
