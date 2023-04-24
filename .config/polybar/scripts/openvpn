@@ -48,9 +48,9 @@ if [ -n "$VPN_STATUS" ]; then
 			echo "You need to provide a status method."
 		fi
 elif [ -z "$VPN_STATUS" ]; then
-	echo "%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F-}"
+	echo "%{T3}%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F- T-}"
 else
-	echo "%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F-}"
+	echo "%{T3}%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F- T-}"
 fi
 }
 
