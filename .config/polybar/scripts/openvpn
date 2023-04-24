@@ -31,8 +31,8 @@ ip_address_lookup() {
 vpn_report() {
 if [ -n "$VPN_STATUS" ]; then
 		if [ "$@" ]; then
-			if [ "$1" == "pq" ]; then
-				report="PQ"
+			if [ "$1" == "vpn" ]; then
+				report="On"
 				echo "%{B$COLOR_BACKGROUND}%{F$COLOR_CONNECTED}$ICON_CONNECTED%{B- F-}"
 
 			elif [ "$1" == "geoip" ] && hash geoiplookup 2>/dev/null; then
