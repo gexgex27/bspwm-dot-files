@@ -1,12 +1,15 @@
 #!/bin/bash
 
-VPN_NAME="PQ"
+VPN1="justhost"
+VPN2="wg0-client-x5x"
 
-VPN_CONNECT="nmcli connection up pq"
-VPN_DISCONNECT="nmcli connection down pq"
+VPN_CONNECT="nmcli connection up"
+VPN_DISCONNECT="nmcli connection down"
 
 VPN_GET_STATUS="nmcli connection show --active"
-VPN_STATUS="$($VPN_GET_STATUS | grep pq | awk '{print $1}')"
+
+VPN1_STATUS="$($VPN_GET_STATUS | grep $VPN1 | awk '{print $1}')"
+VPN2_STATUS="$($VPN_GET_STATUS | grep $VPN2 | awk '{print $1}')"
 
 ICON_CONNECTED=""
 ICON_DISCONNECTED=""
@@ -14,56 +17,120 @@ COLOR_CONNECTED="#A3BE8C"
 COLOR_DISCONNECTED="#BF616A"
 COLOR_BACKGROUND="#e7e8eb"
 
-vpn_toggle_connection() {
-if [ -n "$VPN_STATUS" ];
-then
-        $VPN_DISCONNECT
-else
-        $VPN_CONNECT
-fi
+VPN1_CONNECTED="$VPN1 $ICON_CONNECTED"
+VPN2_CONNECTED="$VPN2 $ICON_CONNECTED"
+
+connect() {
+    echo $VPN_CONNECT $1
+    $VPN_CONNECT $1
+}
+disconnect() {
+    echo $VPN_DISCONNECT $1
+    $VPN_DISCONNECT $1
+}
+
+default() {
+    if [[ $VPN1_STATUS == $VPN1 ]]; then
+        disconnect $VPN1
+    else
+        connect $VPN1
+    fi
+}
+
+toggle() {
+    if [[ $1 == $VPN1 ]];
+    then
+        if [[ $1 == $VPN1 ]] && [[ -n $VPN2_STATUS ]]; then
+            disconnect $VPN2
+            connect $VPN1
+        elif [[ $1 == $VPN1_STATUS ]]; then
+            disconnect $VPN1
+        else
+            connect $VPN1
+        fi
+    fi
+
+    if [[ $1 == $VPN2 ]]; then
+        if [[ $1 == $VPN2 ]] && [[ -n $VPN1_STATUS ]]; then
+            disconnect $VPN1
+            connect $VPN2
+        elif [[ $1 == $VPN2_STATUS ]]; then
+            disconnect $VPN2
+        else
+            connect $VPN2
+        fi
+    fi
+}
+
+check_connection() {
+    if [[ -n $VPN1_STATUS ]] || [[ -n $VPN2_STATUS ]]; then
+        if [[ $VPN1_STATUS == $VPN1 ]]; then
+            echo $VPN1_CONNECTED\|$VPN2 | rofi -dmenu -sep '|' -i -p Menu -theme ~/.config/rofi/vpn.rasi
+        elif [[ $VPN2_STATUS == $VPN2 ]]; then
+            echo $VPN1\|$VPN2_CONNECTED | rofi -dmenu -sep '|' -i -p Menu -theme ~/.config/rofi/vpn.rasi
+        fi
+    else
+        echo $VPN1\|$VPN2 | rofi -dmenu -sep '|' -i -p Menu -theme ~/.config/rofi/vpn.rasi
+    fi
 }
 
 ip_address_lookup() {
-	ip_address=$(curl --silent https://icanhazip.com/)
-	echo "$ip_address"
+    ip_address=$(curl --silent https://icanhazip.com/)
+    echo "$ip_address"
+}
+
+vpn_location_menu() {
+    if hash rofi 2>/dev/null; then
+        MENU=$(check_connection)
+        echo $MENU
+        case "$MENU" in
+            *$VPN1 | $VPN1_CONNECTED)
+                toggle $VPN1
+                return
+                ;;
+            *$VPN2 | $VPN2_CONNECTED)
+                toggle $VPN2
+                return
+                ;;
+        esac
+    fi
 }
 
 vpn_report() {
-if [ -n "$VPN_STATUS" ]; then
-		if [ "$@" ]; then
-			if [ "$1" == "vpn" ]; then
-				report="On"
-				echo "%{B$COLOR_BACKGROUND}%{F$COLOR_CONNECTED}$ICON_CONNECTED%{B- F-}"
-
-			elif [ "$1" == "geoip" ] && hash geoiplookup 2>/dev/null; then
-				ip_address=$(ip_address_lookup)
-				country=$(geoiplookup "$ip_address" | head -n1 | cut -c24-25)
-				city=$(geoiplookup "$ip_address" | cut -d',' -f5 | sed -n '2{p;q}' | sed 's/^ //')
-				report="$city $country"
-
-			elif [ "$1" == "ip" ]; then
-				report=$(ip_address_lookup)
-			fi
-		else
-			echo "You need to provide a status method."
-		fi
-elif [ -z "$VPN_STATUS" ]; then
-	echo "%{T3}%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F- T-}"
-else
-	echo "%{T3}%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F- T-}"
-fi
+    if [[ -n $VPN1_STATUS ]] || [[ -n $VPN2_STATUS ]]; then
+        if [[ $@ ]]; then
+            if [[ $1 == "vpn" ]] && [[ $VPN1_STATUS == $VPN1 ]]; then
+                report=$VPN1
+                echo "%{T3}%{B$COLOR_BACKGROUND}%{F$COLOR_CONNECTED}$ICON_CONNECTED%{B- F- T-}"
+            elif [[ $1 == "vpn" ]] && [[ $VPN2_STATUS == $VPN2 ]]; then
+                report=$VPN2
+                echo "%{T3}%{B$COLOR_BACKGROUND}%{F$COLOR_CONNECTED}$ICON_CONNECTED%{B- F- T-}"
+            elif [ $1 == "geoip" ] && hash geoiplookup 2>/dev/null; then
+                ip_address=$(ip_address_lookup)
+                country=$(geoiplookup "$ip_address" | head -n1 | cut -c24-25)
+                city=$(geoiplookup "$ip_address" | cut -d',' -f5 | sed -n '2{p;q}' | sed 's/^ //')
+                report="$city $country"
+            elif [ $1 == "ip" ]; then
+                report=$(ip_address_lookup)
+            fi
+        else
+            echo "You need to provide a status method."
+        fi
+    else
+        echo "%{T3}%{B$COLOR_BACKGROUND}%{F$COLOR_DISCONNECTED}$ICON_DISCONNECTED%{B- F- T-}"
+    fi
 }
 
 ip_address_to_clipboard() {
-# finds your IP and copies to clipboard
-	ip_address_lookup | xclip -selection clipboard
+    ip_address_lookup | xclip -selection clipboard
 }
 
 case "$1" in
-	toggle|--toggle-connection) vpn_toggle_connection ;;
-	ip-clip|--ip-address) ip_address_to_clipboard ;;
-	status) vpn_report "$2" ;;
-	help|*) cat <<- EOF
+    toggle|--toggle-connection) default ;;
+    menu| --connection-menu) vpn_location_menu ;;
+    ip-clip|--ip-address) ip_address_to_clipboard ;;
+    status) vpn_report "$2" ;;
+    help|*) cat <<- EOF
 		  Usage: vpn_module <option>
 		  options:
 		    toggle           toggles VPN connection
