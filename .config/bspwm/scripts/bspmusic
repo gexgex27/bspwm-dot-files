@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-# kitty directory
 DIR="$HOME/.config/alacritty"
 
 CONFIG="$DIR/alacritty.yml"
 
 alacritty --class 'Music,Music' --config-file "$CONFIG" \
-		  -o window.dimensions.columns=109 window.dimensions.lines=22 \
-		  -e ~/.config/ncmpcpp/scripts/ncmpcpp-art
+    -o window.dimensions.columns=109 window.dimensions.lines=22 \
+    -e ~/.config/ncmpcpp/scripts/ncmpcpp-art

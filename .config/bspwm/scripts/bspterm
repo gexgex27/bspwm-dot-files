@@ -5,11 +5,11 @@ DIR="$HOME/.config/bspwm"
 CONFIG="$HOME/.config/kitty/kitty.conf"
 
 if [ "$1" == "--float" ]; then
-	kitty --class 'kitty-float,kitty-float' --config "$CONFIG"
+    kitty --class 'kitty-float' --config "$CONFIG"
 elif [ "$1" == "--full" ]; then
-	kitty --class 'Fullscreen,Fullscreen' --config "$CONFIG" \
+    kitty --class 'Fullscreen' --config "$CONFIG" \
         --start-as=fullscreen \
         -o window_padding_width=30
 else
-	kitty --config "$CONFIG"
+    kitty --config "$CONFIG"
 fi

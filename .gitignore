@@ -15,8 +15,12 @@
 !/.config/mpd
 !/.config/ncmpcpp
 !/.config/xsettingsd
+!/.config/picom
 !/.local
 /.local/*
+!/.local/bin
+/.local/bin/*
+!/.local/bin/kunst
 !/.local/share
 /.local/share/*
 !/.local/share/mpd

@@ -27,8 +27,8 @@ super + shift + {f,b,e}
 	{thunar,firefox,geany}
 
 # Terminal Apps
-ctrl + alt + {v,r,h}
-	kitty --config ~/.config/bspwm/alacritty/alacritty.yml -e {vim,ranger,htop}
+ctrl + alt + {n,f,h}
+	kitty --config ~/.config/kitty/kitty.conf -e {nvim,mc,htop}
 
 # Color Picker
 super + p

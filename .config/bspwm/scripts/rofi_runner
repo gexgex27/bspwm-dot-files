@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-# Import Current Theme
 DIR="$HOME/.config/rofi"
 RASI="$DIR/runner.rasi"
 
-# Run
 rofi \
     -show run \
-	  -theme ${RASI}
+    -theme ${RASI}
