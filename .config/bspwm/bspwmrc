@@ -25,7 +25,7 @@ BSPWM_SRATIO='0.50'
 workspaces() {
     name=1
     for monitor in `bspc query -M`; do
-        bspc monitor ${monitor} -n "$name" -d '1' '2' '3' '4' '5' '6' '7' '8' '9'
+        bspc monitor ${monitor} -n "$name" -d '1' '2' '3' '4' '5' '6' '7' '8' '9' '10'
         let name++
     done
 }
@@ -62,11 +62,10 @@ for i in ${terminal[@]}; do
 bspc rule -a $i desktop='^1' follow=on focus=on; done
 
 ## 2 > web (always open web browser on workspace-2)
-bspc rule -a firefox desktop='^2' follow=on focus=on
-bspc rule -a chromium desktop='^2' follow=on focus=on
-declare -a browser=(opera firefox chromium)
+declare -a browser=(Opera firefox chromium)
 for i in ${browser[@]}; do
-bspc rule -a $i desktop='^2' follow=on focus=on; done
+bspc rule -a $i desktop='^2' state=floating follow=on focus=on; done
+bspc rule -a 'Microsoft-edge' desktop='^2' folow=on focus=on
 
 ## 3 > files (always open file manager on workspace-3)
 declare -a files=(Pcmanfm Thunar qBittorrent)
@@ -74,7 +73,7 @@ for i in ${files[@]}; do
 bspc rule -a $i desktop='^3' follow=on focus=on; done
 
 ## 4 > code (always open editors on workspace-4)
-declare -a code=(Geany code-oss)
+declare -a code=(Geany Code Termius Gftp-gtk kate QtCreator jetbrains-phpstorm)
 for i in ${code[@]}; do
 bspc rule -a $i desktop='^4' follow=on focus=on; done
 
@@ -84,9 +83,12 @@ declare -a office=(Gucharmap Atril Evince \
     libreoffice-startcenter libreoffice Soffice *:libreofficedev *:soffice)
 for i in ${office[@]}; do
 bspc rule -a $i desktop='^5' follow=on focus=on; done
+bspc rule -a 'MyOffice Text Home Edition' desktop='^5' follow=on focus=on
+bspc rule -a 'MyOffice Spreadsheet Home Edition' desktop='^5' follow=on focus=on
+bspc rule -a 'ONLYOFFICE Desktop Editors' desktop='^5' follow=on focus=on
 
 ## 6 > communication (always open communication apps on workspace-6)
-declare -a comm=(Thunderbird TelegramDesktop Hexchat Mailspring)
+declare -a comm=(Thunderbird TelegramDesktop Hexchat Mailspring Joplin discord)
 for i in ${comm[@]}; do
 bspc rule -a $i desktop='^6' follow=on focus=on; done
 
@@ -94,13 +96,14 @@ bspc rule -a $i desktop='^6' follow=on focus=on; done
 declare -a media=(Audacity Music MPlayer Lxmusic Inkscape Gimp-2.10 obs)
 for i in ${media[@]}; do
 bspc rule -a $i desktop='^7' state=floating follow=on focus=on; done
+bspc rule -a mpv desktop='^7' follow=on focus=on
 
 ## 8 > system (always open system apps on workspace-8)
 bspc rule -a 'VirtualBox Manager' desktop='^8' follow=on focus=on
 bspc rule -a GParted desktop='^8' follow=on focus=on
 declare -a settings=(Lxappearance Lxtask Lxrandr Arandr \
         System-config-printer.py Pavucontrol Exo-helper-1 \
-    Xfce4-power-manager-settings)
+    Xfce4-power-manager-settings SVPManager Nitrogen)
 for i in ${settings[@]}; do
 bspc rule -a $i desktop='^8' state=floating follow=on focus=on; done
 

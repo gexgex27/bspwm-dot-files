@@ -14,6 +14,7 @@
 !/.config/gtk-3.0
 !/.config/mpd
 !/.config/ncmpcpp
+/.config/ncmpcpp/error.log
 !/.config/xsettingsd
 !/.config/picom
 !/.local
